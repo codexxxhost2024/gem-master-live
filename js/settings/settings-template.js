@@ -1,12 +1,12 @@
 export const settingsTemplate = `
 <div class="settings-group">
     <label for="apiKey">Gemini API Key</label>
-    <input type="password" id="apiKey" placeholder="Enter your Gemini API key">
+    <input type="password" id="AIzaSyDLulNBStilTNhfODDPoOQdqMWpyaXEFYI" placeholder="AIzaSyDLulNBStilTNhfODDPoOQdqMWpyaXEFYI">
 </div>
 
 <div class="settings-group">
     <label for="deepgramApiKey">Deepgram API Key (Optional)</label>
-    <input type="password" id="deepgramApiKey" placeholder="Enter your Deepgram API key">
+    <input type="password" id="5d09159d5015ca21caaf3bbde14ad6f6e0a6c6ce" placeholder="5d09159d5015ca21caaf3bbde14ad6f6e0a6c6ce">
 </div>
 
 <div class="settings-group">
