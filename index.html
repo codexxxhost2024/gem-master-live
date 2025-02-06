@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aitek Live</title>
+    <title>Gemini Live</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
         :root {
             --bg-color: #1a1a1a;
@@ -12,6 +13,9 @@
             --text-color: #ffffff;
             --accent-color: #4CAF50;
             --danger-color: #ff4444;
+            --msg-user-bg: #007AFF; /* iOS Blue */
+            --msg-model-bg: #444444;
+            --font-size: 14px; /* Base font size */
         }
 
         * {
@@ -27,6 +31,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            font-size: var(--font-size); /* Use the variable for font size */
         }
 
         .app-container {
@@ -34,281 +39,190 @@
             width: 100%;
             height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+        }
+
+        /* Header */
+        .app-header {
+            width: 100%; /* Full width */
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-        }
-
-        .disconnect-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 10px 20px;
+            padding: 10px;
             background-color: var(--button-bg);
-            color: var(--danger-color);
-            border: 1px solid var(--danger-color);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            border-bottom: 1px solid #333;
         }
 
-        .disconnect-btn:hover {
-            background-color: var(--danger-color);
+        .app-header h1 {
+            font-size: 1.2rem; /* Slightly larger title */
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-button {
+            background-color: transparent;
             color: var(--text-color);
-        }
-
-        .connect-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 10px 20px;
-            background-color: var(--button-bg);
-            color: var(--accent-color);
-            border: 1px solid var(--accent-color);
-            border-radius: 8px;
+            border: none;
             cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .connect-btn:hover {
-            background-color: var(--accent-color);
-            color: var(--text-color);
-        }
-
-        .mic-btn {
-            width: 45px;
-            height: 45px;
+            font-size: 1.5rem; /* Larger icons */
+            padding: 5px; /* Reduced padding */
             border-radius: 50%;
-            background-color: var(--button-bg);
-            border: 2px solid var(--accent-color);
-            color: var(--text-color);
-            cursor: pointer;
             display: flex;
-            justify-content: center;
             align-items: center;
-            transition: all 0.3s ease;
-            z-index: 2;
-            position: absolute;
-            bottom: 22px;
-            right: 25px;
-        }
-
-        .camera-btn,
-        .screen-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-color: var(--button-bg);
-            border: 2px solid var(--accent-color);
-            color: var(--text-color);
-            cursor: pointer;
-            display: flex;
             justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
-            z-index: 2;
-            position: absolute;
-            right: 25px;
+            transition: background-color 0.3s ease;
         }
 
-        .camera-btn {
-            bottom: 142px;
-        }
-
-        .screen-btn {
-            bottom: 82px;
-        }
-
-        .camera-btn:hover,
-        .screen-btn:hover {
+        .header-button:hover {
             background-color: var(--button-hover);
-            transform: scale(1.05);
         }
 
-        .camera-btn.active,
-        .screen-btn.active {
-            background-color: var(--accent-color);
-        }
-
-        @media screen and (max-width: 350px) {
-            .mic-btn {
-                bottom: 80px;
-            }
-            
-            .camera-btn {
-                bottom: 200px;
-            }
-            
-            .screen-btn {
-                bottom: 140px;
-            }
-        }
-
-        .mic-btn:hover {
-            background-color: var(--button-hover);
-            transform: scale(1.05);
-        }
-
-        .mic-btn.active {
-            background-color: var(--accent-color);
-        }
-
-        .mic-icon {
-            font-size: 16px;
-        }
-
-        .text-input-container {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 100px; /* Leave space for mic button */
+        /* Chat History */
+        .chat-history {
+            flex-grow: 1;
+            width: 100%; /* Full width within app-container */
+            padding: 10px;
+            overflow-y: auto;
             display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chat-message {
+            padding: 10px 14px;
+            border-radius: 20px;
+            max-width: 80%;
+            word-wrap: break-word;
+            line-height: 1.4;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-message {
+            background-color: var(--msg-user-bg);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .model-message {
+            background-color: var(--msg-model-bg);
+            color: white;
+            align-self: flex-start;
+        }
+
+        /* Footer - Input and Controls */
+        .app-footer {
+            width: 100%; /* Full width */
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--button-bg);
+            border-top: 1px solid #333;
             gap: 10px;
-            z-index: 2;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-button {
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem; /* Larger icons */
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .control-button:hover {
+            background-color: var(--button-hover);
         }
 
         .text-input {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--accent-color);
-            background-color: var(--button-bg);
+            flex-grow: 1;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: none;
+            background-color: #333;
             color: var(--text-color);
-            font-size: 16px;
+            font-size: 1rem;
             outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%; /* Add this line */
+            max-width: 600px; /* optional, max width on larger screens */
         }
 
-        .text-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-        }
-
-        .send-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background-color: var(--button-bg);
-            border: 1px solid var(--accent-color);
+        .send-button {
+            background-color: transparent; /* Remove the background color */
             color: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
             display: flex;
-            justify-content: center;
             align-items: center;
-            transition: all 0.3s ease;
+            justify-content: center;
+            font-size: 1.5rem; /* Larger send icon */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: color 0.3s ease; /* Changed transition */
         }
 
-        .send-btn:hover {
-            background-color: var(--accent-color);
-            color: var(--text-color);
+        .send-button:hover {
+            color: #388e3c; /* Changed hover color */
         }
 
-        .visualizer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 200px;
-            z-index: 1;
-        }
-
-        .camera-preview {
-            position: absolute;
-            bottom: 100px;
-            left: 20px;
-            width: 240px; /* Default width */
-            height: 180px;
+        /* Camera and Screen Previews */
+        .camera-preview,
+        .screen-preview {
+            position: fixed;
+            bottom: 70px;
+            left: 10px;
+            width: 140px; /* Slightly wider */
+            height: 105px; /* Adjusted for aspect ratio */
             background-color: var(--button-bg);
-            border: 1px solid var(--accent-color);
             border-radius: 8px;
             overflow: hidden;
             z-index: 2;
-            display: none; /* Hidden by default */
+            display: none;
         }
 
-        .camera-preview video {
+        .camera-preview.active,
+        .screen-preview.active {
+            display: block;
+        }
+
+        .camera-preview video,
+        .screen-preview video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .screen-preview {
-            position: absolute;
-            bottom: 300px;
-            left: 20px;
-            width: 240px;
-            height: 135px; /* 16:9 aspect ratio */
-            background-color: var(--button-bg);
-            border: 1px solid var(--accent-color);
-            border-radius: 8px;
-            overflow: hidden;
-            z-index: 2;
-            display: none; /* Hidden by default */
-        }
-
-        .screen-preview video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Maintain aspect ratio without cropping */
-        }
-
-        @media (max-width: 340px) {
-            .camera-preview {
-                width: 180px;
-                right: 25px;
-            }
-            .screen-preview {
-                width: 180px;
-                height: 101px; /* Maintain 16:9 aspect ratio */
-            }
-        }
-
-        .camera-switch-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            z-index: 1000;
-            transition: background-color 0.2s;
-        }
-
-        .camera-switch-btn:hover {
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            .camera-switch-btn {
-                display: none;
-            }
-        }
-
-        .settings-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px;
-            background-color: var(--button-bg);
-            color: var(--text-color);
-            border: 1px solid var(--accent-color);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 20px;
-            transition: all 0.3s ease;
+        /* Settings Dialog */
+        .settings-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 1000;
         }
 
-        .settings-btn:hover {
-            background-color: var(--button-hover);
+        .settings-overlay.active {
+            display: block;
         }
 
         .settings-dialog {
@@ -332,21 +246,6 @@
             display: block;
         }
 
-        .settings-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        .settings-overlay.active {
-            display: block;
-        }
-
         .settings-group {
             margin-bottom: 20px;
         }
@@ -360,28 +259,11 @@
         .settings-group select,
         .settings-group input {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             background-color: var(--button-bg);
             border: 1px solid var(--accent-color);
-            border-radius: 4px;
+            border-radius: 6px;
             color: var(--text-color);
-        }
-
-        .collapsible {
-            background-color: var(--button-bg);
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .collapsible-content {
-            display: none;
-            padding: 10px;
-        }
-
-        .collapsible-content.active {
-            display: block;
         }
 
         .settings-save-btn {
@@ -400,80 +282,138 @@
             opacity: 0.9;
         }
 
-        .chat-history {
-            position: absolute;
-            top: 60px;
-            left: 20px;
-            right: 20px;
-            bottom: 120px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 1;
-        }
-
-        .chat-message {
-            padding: 10px 15px;
-            border-radius: 15px;
-            max-width: 80%;
-            word-wrap: break-word;
-            line-height: 1.4;
-        }
-
-        .user-message {
-            background: #2c5282;
-            color: white;
-            align-self: flex-end;
-            margin-left: 20%;
-        }
-
-        .model-message {
-            background: #2d3748;
-            color: white;
-            align-self: flex-start;
-            margin-right: 20%;
-        }
-
-        .model-message.streaming::after {
-            content: '▋';
-            display: inline-block;
-            animation: blink 1s step-end infinite;
-            margin-left: 2px;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        /* Media Queries for Responsiveness */
+        @media (min-width: 768px) {
+            .app-container {
+                width: 80%;
+                max-width: 600px;
+                margin: 0 auto;
+            }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <button id="disconnectBtn" class="disconnect-btn">Disconnect</button>
-        <button id="connectBtn" class="connect-btn" style="display: none;">Connect</button>
-        <button id="settingsBtn" class="settings-btn">⚙️</button>
-        <button id="cameraBtn" class="camera-btn">
-            <span class="camera-icon">📷</span>
-        </button>
-        <button id="screenBtn" class="screen-btn">
-            <span class="screen-icon">🖥️</span>
-        </button>
-        <button id="micBtn" class="mic-btn">
-            <span class="mic-icon">🎤</span>
-        </button>
-        <div id="chatHistory" class="chat-history"></div>
-        <canvas id="visualizer" class="visualizer"></canvas>
-        <div id="cameraPreview" class="camera-preview"></div>
-        <div id="screenPreview" class="screen-preview"></div>
-        <div class="text-input-container">
-            <input type="text" id="messageInput" placeholder="Type your message..." class="text-input">
-            <button id="sendBtn" class="send-btn">➤</button>
+        <!-- Header -->
+        <div class="app-header">
+            <h1>Gemini Live</h1>
+            <div class="header-buttons">
+                <button id="disconnectBtn" class="header-button"><i class="material-icons">power_settings_new</i></button>
+                <button id="connectBtn" class="header-button" style="display: none;"><i class="material-icons">rss_feed</i></button>
+                <button id="settingsBtn" class="header-button"><i class="material-icons">settings</i></button>
+            </div>
+        </div>
+
+        <!-- Chat History -->
+        <div id="chatHistory" class="chat-history">
+            <!-- Messages will be dynamically added here -->
+            <div class="chat-message user-message">Hello, how are you?</div>
+            <div class="chat-message model-message">I'm doing well, thank you!</div>
+        </div>
+
+        <!-- Footer - Input and Controls -->
+        <div class="app-footer">
+            <div class="control-buttons">
+                <button id="cameraBtn" class="control-button"><i class="material-icons">videocam</i></button>
+                <button id="screenBtn" class="control-button"><i class="material-icons">screen_share</i></button>
+                <button id="micBtn" class="control-button"><i class="material-icons">mic</i></button>
+            </div>
+            <input type="text" id="messageInput" class="text-input" placeholder="Type your message...">
+            <button id="sendBtn" class="send-button"><i class="material-icons">send</i></button>
+        </div>
+
+        <!-- Camera and Screen Previews -->
+        <div id="cameraPreview" class="camera-preview">
+            <video></video>
+        </div>
+        <div id="screenPreview" class="screen-preview">
+            <video></video>
+        </div>
+
+        <!-- Settings Overlay and Dialog -->
+        <div id="settingsOverlay" class="settings-overlay"></div>
+        <div id="settingsDialog" class="settings-dialog">
+            <!-- Settings Content (example) -->
+            <div class="settings-group">
+                <label for="audioSource">Audio Source:</label>
+                <select id="audioSource">
+                    <!-- Options populated by JavaScript -->
+                </select>
+            </div>
+            <button class="settings-save-btn">Save Settings</button>
         </div>
     </div>
-    <script type="module" src="js/script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const disconnectBtn = document.getElementById('disconnectBtn');
+            const connectBtn = document.getElementById('connectBtn');
+            const settingsBtn = document.getElementById('settingsBtn');
+            const cameraBtn = document.getElementById('cameraBtn');
+            const screenBtn = document.getElementById('screenBtn');
+            const micBtn = document.getElementById('micBtn');
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const chatHistory = document.getElementById('chatHistory');
+            const cameraPreview = document.getElementById('cameraPreview');
+            const screenPreview = document.getElementById('screenPreview');
+            const settingsOverlay = document.getElementById('settingsOverlay');
+            const settingsDialog = document.getElementById('settingsDialog');
+
+            // Toggle Camera Preview
+            cameraBtn.addEventListener('click', () => {
+                cameraPreview.classList.toggle('active');
+                screenPreview.classList.remove('active');
+            });
+
+            // Toggle Screen Share Preview
+            screenBtn.addEventListener('click', () => {
+                screenPreview.classList.toggle('active');
+                cameraPreview.classList.remove('active');
+            });
+
+             // Toggle Mic and Visualizer - No specific visualizer in this code but adding for completeness
+            micBtn.addEventListener('click', () => {
+                // Implement your visualizer toggle logic here.  Example:
+                // visualizer.classList.toggle('active');  (if you have a .visualizer element)
+            });
+
+
+            // Connect/Disconnect Button
+            disconnectBtn.addEventListener('click', () => {
+                disconnectBtn.style.display = 'none';
+                connectBtn.style.display = 'inline-flex';
+            });
+
+            connectBtn.addEventListener('click', () => {
+                disconnectBtn.style.display = 'inline-flex';
+                connectBtn.style.display = 'none';
+            });
+
+            // Settings Button and Dialog
+            settingsBtn.addEventListener('click', () => {
+                settingsOverlay.classList.add('active');
+                settingsDialog.classList.add('active');
+            });
+
+            settingsOverlay.addEventListener('click', () => {
+                settingsOverlay.classList.remove('active');
+                settingsDialog.classList.remove('active');
+            });
+
+            // Send Message
+            sendBtn.addEventListener('click', () => {
+                const messageText = messageInput.value.trim();
+                if (messageText) {
+                    const message = document.createElement('div');
+                    message.className = 'chat-message user-message';
+                    message.textContent = messageText;
+                    chatHistory.appendChild(message);
+                    messageInput.value = '';
+                    chatHistory.scrollTop = chatHistory.scrollHeight;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
