@@ -4,13 +4,13 @@
 2. Clone the repository
 
    ```bash
-   git clone [https://github.com/ViaAnthroposBenevolentia/gemini-2-live-api-demo.git
+   git clone https://github.com/codexxxhost2024/gem-master-live.git
    ```
 
 3. Start the development server (adjust port if needed):
 
    ```bash
-   cd gemini-2-live-api-demo
+   cd gem-master-live
    python -m http.server 8000 # or npx http-server 8000 or Open with Live Server extension for VS Code
    ```
 
