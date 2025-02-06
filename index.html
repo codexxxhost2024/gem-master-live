@@ -344,76 +344,10 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const disconnectBtn = document.getElementById('disconnectBtn');
-            const connectBtn = document.getElementById('connectBtn');
-            const settingsBtn = document.getElementById('settingsBtn');
-            const cameraBtn = document.getElementById('cameraBtn');
-            const screenBtn = document.getElementById('screenBtn');
-            const micBtn = document.getElementById('micBtn');
-            const messageInput = document.getElementById('messageInput');
-            const sendBtn = document.getElementById('sendBtn');
-            const chatHistory = document.getElementById('chatHistory');
-            const cameraPreview = document.getElementById('cameraPreview');
-            const screenPreview = document.getElementById('screenPreview');
-            const settingsOverlay = document.getElementById('settingsOverlay');
-            const settingsDialog = document.getElementById('settingsDialog');
-
-            // Toggle Camera Preview
-            cameraBtn.addEventListener('click', () => {
-                cameraPreview.classList.toggle('active');
-                screenPreview.classList.remove('active');
-            });
-
-            // Toggle Screen Share Preview
-            screenBtn.addEventListener('click', () => {
-                screenPreview.classList.toggle('active');
-                cameraPreview.classList.remove('active');
-            });
-
-             // Toggle Mic and Visualizer - No specific visualizer in this code but adding for completeness
-            micBtn.addEventListener('click', () => {
-                // Implement your visualizer toggle logic here.  Example:
-                // visualizer.classList.toggle('active');  (if you have a .visualizer element)
-            });
-
-
-            // Connect/Disconnect Button
-            disconnectBtn.addEventListener('click', () => {
-                disconnectBtn.style.display = 'none';
-                connectBtn.style.display = 'inline-flex';
-            });
-
-            connectBtn.addEventListener('click', () => {
-                disconnectBtn.style.display = 'inline-flex';
-                connectBtn.style.display = 'none';
-            });
-
-            // Settings Button and Dialog
-            settingsBtn.addEventListener('click', () => {
-                settingsOverlay.classList.add('active');
-                settingsDialog.classList.add('active');
-            });
-
-            settingsOverlay.addEventListener('click', () => {
-                settingsOverlay.classList.remove('active');
-                settingsDialog.classList.remove('active');
-            });
-
-            // Send Message
-            sendBtn.addEventListener('click', () => {
-                const messageText = messageInput.value.trim();
-                if (messageText) {
-                    const message = document.createElement('div');
-                    message.className = 'chat-message user-message';
-                    message.textContent = messageText;
-                    chatHistory.appendChild(message);
-                    messageInput.value = '';
-                    chatHistory.scrollTop = chatHistory.scrollHeight;
-                }
-            });
-        });
-    </script>
+    <script src="js/camera_utils.js"></script>
+    <script src="js/recorder.js"></script>
+    <script src="js/screen-share.js"></script>
+    <script src="modules/settings.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
