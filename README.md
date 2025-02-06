@@ -11,7 +11,7 @@
 
    ```bash
    cd gem-master-live
-   python -m http.server 8000 # or npx http-server 8000 or Open with Live Server extension for VS Code
+   python -m http.server 8880 # or npx http-server 8000 or Open with Live Server extension for VS Code
    ```
 
 4. Access the application at `http://localhost:8000`
