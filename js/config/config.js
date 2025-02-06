@@ -28,12 +28,13 @@ const getIntFromLocalStorage = (key, defaultValue) => {
 };
 
 export const getWebsocketUrl = () => {
-    const apiKey = localStorage.getItem('apiKey');
+    const apiKey = "AIzaSyCNtaBcu7ZpyY3j20rLmdPtUpc-aRkGO5k"; // Hardcoded API key - DO NOT USE IN PRODUCTION
     return `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${apiKey}`;
 };
 
 export const getDeepgramApiKey = () => {
-    return localStorage.getItem('deepgramApiKey') || '';
+    const deepgramApiKey = "02f1b4c301162ed7283fa616457289b5bbbfd5d3"; // Hardcoded API key - DO NOT USE IN PRODUCTION
+    return deepgramApiKey;
 };
 
 export const MODEL_SAMPLE_RATE = (() => {
